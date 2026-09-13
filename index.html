@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -149,7 +151,7 @@
                 contenedor.innerHTML = `<p style="color: #a70bfa; text-align: center; font-size: 0.85rem;">No se encontraron resultados</p>`;
                 return;
             }
-            lista.forEach((item, index) => {
+            lista.forEach((item) => {
                 contenedor.innerHTML += `
                     <div class="item-card">
                         <div class="item-info">
@@ -174,7 +176,11 @@
         }
 
         function filtrarContenido() {
-            const query = document.getElementById('searchInput'].value.toLowerCase();
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (query === "") {
+                mostrarResultados(baseDatos);
+                return;
+            }
             const filtrados = baseDatos.filter(item => 
                 item.titulo.toLowerCase().includes(query) || 
                 item.plataforma.toLowerCase().includes(query) || 
@@ -185,15 +191,15 @@
 
         function procesarImagen(input) {
             if (input.files && input.files[0]) {
-                alert("¡Captura analizada en el núcleo! Coincidencia encontrada.");
+                // Simulamos la detección exitosa de una captura y autocompletamos el buscador
+                alert("¡Captura analizada con éxito!");
                 document.getElementById('searchInput').value = "Billionaire";
                 filtrarContenido();
             }
         }
 
+        // Cargar todos los elementos por defecto al iniciar la app
         mostrarResultados(baseDatos);
     </script>
 </body>
 </html>
-
-
