@@ -29,6 +29,8 @@ jobs:
           cd myApp
           rm -rf www/*
           cp ../index.html www/index.html
+                    find www/ -type f -name "*.js" -exec sed -i 's/alert(/console.log(/g' {} + || true
+
           cordova platform add android
           cordova build android --debug
 
