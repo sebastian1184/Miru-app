@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -144,6 +142,10 @@
             { tipo: "Plataforma", titulo: "ShortTV", plataforma: "App Oficial", desc: "Historias cortas", url: "https://shorttv.app" }
         ];
 
+        // Lista de términos de prueba para simular el reconocimiento dinámico de diferentes capturas
+        const terminosSimulados = ["Billionaire", "Alpha", "ReelShort", "Divorce"];
+        let indiceSimulacion = 0;
+
         function mostrarResultados(lista) {
             const contenedor = document.getElementById('resultsList');
             contenedor.innerHTML = "";
@@ -191,14 +193,21 @@
 
         function procesarImagen(input) {
             if (input.files && input.files[0]) {
-                // Simulamos la detección exitosa de una captura y autocompletamos el buscador
-                alert("¡Captura analizada con éxito!");
-                document.getElementById('searchInput').value = "Billionaire";
+                // Rotamos entre diferentes palabras clave para que cada nueva imagen busque algo distinto
+                const palabraElegida = terminosSimulados[indiceSimulacion];
+                indiceSimulacion = (indiceSimulacion + 1) % terminosSimulados.length;
+
+                document.getElementById('searchInput').value = palabraElegida;
                 filtrarContenido();
+
+                alert(`¡Captura procesada! Coincidencia detectada: "${palabraElegida}"`);
+                
+                // Limpiamos el input para permitir subir la misma imagen u otra de nuevo sin que se bloquee
+                input.value = '';
             }
         }
 
-        // Cargar todos los elementos por defecto al iniciar la app
+        // Cargar todo por defecto al iniciar
         mostrarResultados(baseDatos);
     </script>
 </body>
