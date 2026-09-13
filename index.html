@@ -19,7 +19,7 @@
             font-size: 2.5rem;
         }
         p {
-            color: #a78bfa;
+            color: #a70bfa;
             font-size: 1.1rem;
         }
         .card {
@@ -47,13 +47,21 @@
 </head>
 <body>
     <h1>MIRU</h1>
-    <p>Identificación de Microseries y Búsqueda Visual</p>
-    
+    <p>Identificación de Miniseries y Búsqueda Visual</p>
+
     <div class="card">
         <h3>Estado del Sistema</h3>
         <p>Núcleo Cyberpunk Activo ⚡</p>
-        
-
+        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="buscarEnGoogle(this)">
+        <button class="btn" onclick="document.getElementById('fileInput').click();">Escanear Ahora</button>
     </div>
+
+    <script>
+        function buscarEnGoogle(input) {
+            if (input.files && input.files[0]) {
+                window.open("https://www.google.com/search?q=miniserie+corta+ver+online", "_blank");
+            }
+        }
+    </script>
 </body>
 </html>
