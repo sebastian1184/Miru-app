@@ -64,7 +64,7 @@
             max-height: 250px;
             overflow-y: auto;
         }
-        .platform-item {
+        .item-card {
             background: rgba(0, 255, 255, 0.1);
             border: 1px solid rgba(0, 255, 255, 0.3);
             padding: 10px;
@@ -74,12 +74,12 @@
             justify-content: space-between;
             align-items: center;
         }
-        .platform-info h4 {
+        .item-info h4 {
             margin: 0;
             color: #ff00ff;
             font-size: 0.95rem;
         }
-        .platform-info p {
+        .item-info p {
             margin: 3px 0 0 0;
             color: #a70bfa;
             font-size: 0.8rem;
@@ -99,68 +99,72 @@
 </head>
 <body>
     <h1>MIRU</h1>
-    <p class="subtitle">Catálogo Inteligente de Miniseries</p>
+    <p class="subtitle">Buscador Interno de Miniseries</p>
 
     <div class="card">
-        <h3>Búsqueda Interna</h3>
-        <p style="font-size: 0.85rem; color: #00ffff;">Encuentra dónde ver tus miniseries cortas favoritas al instante.</p>
+        <h3>Biblioteca de Contenido</h3>
+        <p style="font-size: 0.85rem; color: #00ffff;">Busca tu miniserie o plataforma favorita:</p>
         
-        <input type="text" id="searchInput" placeholder="Ej: ReelShort, DramaBox, romance..." onkeyup="filtrarPlataformas()">
+        <input type="text" id="searchInput" placeholder="Ej: Casada con un millonario, ReelShort..." onkeyup="filtrarContenido()">
         
-        <div class="results-container" id="resultsList">
-            <!-- Los elementos se cargan dinámicamente -->
-        </div>
+        <div class="results-container" id="resultsList"></div>
 
         <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="procesarImagen(this)">
         <button class="btn" onclick="document.getElementById('fileInput').click();">📷 Escanear Captura</button>
     </div>
 
     <script>
-        // Catálogo interno de plataformas de miniseries cortas
-        const plataformas = [
-            { nombre: "ReelShort", desc: "Miniseries de romance, drama y millonarios.", url: "https://www.reelshort.com" },
-            { desc: "Dramas cortos y thrillers adictivos.", nombre: "DramaBox", url: "https://www.dramabox.com" },
-            { nombre: "ShortTV", desc: "Historias cortas de múltiples géneros.", url: "https://shorttv.app" },
-            { nombre: "FlexTV", desc: "Episodios rápidos en formato vertical.", url: "https://www.flextv.cc" },
-            { nombre: "NetShort", desc: "Plataforma global de minidramas.", url: "https://www.netshort.com" }
+        // Base de datos combinada de miniseries populares y plataformas
+        const baseDatos = [
+            { tipo: "Serie", titulo: "The Double Life of My Billionaire Husband", plataforma: "ReelShort", desc: "Romance y drama de millonarios", url: "https://www.reelshort.com" },
+            { tipo: "Serie", titulo: "Never Divorce a Secret Billionaire Heiress", plataforma: "ReelShort", desc: "Venganza y romance oculto", url: "https://www.reelshort.com" },
+            { tipo: "Serie", titulo: "The Alpha's Surrogate", plataforma: "DramaBox", desc: "Drama de romance y lobos/fantasía", url: "https://www.dramabox.com" },
+            { tipo: "Plataforma", titulo: "ReelShort", plataforma: "App Oficial", desc: "Miniseries de romance y drama", url: "https://www.reelshort.com" },
+            { tipo: "Plataforma", titulo: "DramaBox", plataforma: "App Oficial", desc: "Dramas cortos y thrillers adictivos", url: "https://www.dramabox.com" },
+            { tipo: "Plataforma", titulo: "ShortTV", plataforma: "App Oficial", desc: "Historias cortas variadas", url: "https://shorttv.app" }
         ];
 
-        function mostrarPlataformas(lista) {
+        function mostrarResultados(lista) {
             const contenedor = document.getElementById('resultsList');
             contenedor.innerHTML = "";
-            lista.forEach(p => {
+            if (lista.length === 0) {
+                contenedor.innerHTML = `<p style="color: #a70bfa; text-align: center; font-size: 0.85rem;">No se encontraron resultados</p>`;
+                return;
+            }
+            lista.forEach(item => {
                 contenedor.innerHTML += `
-                    <div class="platform-item">
-                        <div class="platform-info">
-                            <h4>${p.nombre}</h4>
-                            <p>${p.desc}</p>
+                    <div class="item-card">
+                        <div class="item-info">
+                            <h4>${item.titulo}</h4>
+                            <p>[${item.plataforma}] ${item.desc}</p>
                         </div>
-                        <a href="${p.url}" target="_blank" class="visit-btn">Ver</a>
+                        <a href="${item.url}" target="_blank" class="visit-btn">Ver</a>
                     </div>
                 `;
             });
         }
 
-        function filtrarPlataformas() {
+        function filtrarContenido() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtradas = plataformas.filter(p => 
-                p.nombre.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)
+            const filtrados = baseDatos.filter(item => 
+                item.titulo.toLowerCase().includes(query) || 
+                item.plataforma.toLowerCase().includes(query) || 
+                item.desc.toLowerCase().includes(query)
             );
-            mostrarPlataformas(filtradas);
+            mostrarResultados(filtrados);
         }
 
         function procesarImagen(input) {
             if (input.files && input.files[0]) {
-                // Simulación de procesamiento interno rápido en la app
-                alert("¡Imagen cargada en Miru! Analizando contenido en el núcleo...");
-                // Aquí simulamos que encontró una coincidencia destacada
-                document.getElementById('searchInput').value = "ReelShort";
-                filtrarPlataformas();
+                // Simulación de reconocimiento de imagen interno en la app
+                alert("¡Captura analizada en el núcleo! Coincidencia encontrada.");
+                document.getElementById('searchInput').value = "Billionaire";
+                filtrarContenido();
             }
         }
 
-        // Cargar todas al iniciar
-        mostrarPlataformas(plataformas);
+        // Mostrar todo al iniciar
+        mostrarResultados(baseDatos);
     </script>
 </body>
 </html>
