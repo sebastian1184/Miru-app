@@ -10,17 +10,19 @@
             color: #00ffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            padding: 50px 20px;
+            padding: 30px 15px;
             margin: 0;
         }
         h1 {
             color: #ff00ff;
             text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
         }
-        p {
+        p.subtitle {
             color: #a70bfa;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            margin-top: 0;
         }
         .card {
             background: rgba(20, 15, 38, 0.9);
@@ -29,39 +31,137 @@
             padding: 20px;
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
             max-width: 400px;
-            margin: 30px auto;
+            margin: 20px auto;
         }
         .btn {
             background: linear-gradient(45deg, #ff00ff, #00ffff);
             color: #0b091a;
             border: none;
-            padding: 12px 25px;
-            font-size: 1rem;
+            padding: 10px 20px;
+            font-size: 0.95rem;
             font-weight: bold;
             border-radius: 25px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 10px;
             box-shadow: 0 0 10px #ff00ff;
+            width: 100%;
+        }
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #00ffff;
+            background: #151026;
+            color: #00ffff;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            outline: none;
+            text-align: center;
+        }
+        .results-container {
+            margin-top: 15px;
+            text-align: left;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .platform-item {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .platform-info h4 {
+            margin: 0;
+            color: #ff00ff;
+            font-size: 0.95rem;
+        }
+        .platform-info p {
+            margin: 3px 0 0 0;
+            color: #a70bfa;
+            font-size: 0.8rem;
+        }
+        .visit-btn {
+            background: #00ffff;
+            color: #0b091a;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <h1>MIRU</h1>
-    <p>Identificación de Miniseries y Búsqueda Visual</p>
+    <p class="subtitle">Catálogo Inteligente de Miniseries</p>
 
     <div class="card">
-        <h3>Estado del Sistema</h3>
-        <p>Núcleo Cyberpunk Activo ⚡</p>
-        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="buscarEnGoogle(this)">
-        <button class="btn" onclick="document.getElementById('fileInput').click();">Escanear Ahora</button>
+        <h3>Búsqueda Interna</h3>
+        <p style="font-size: 0.85rem; color: #00ffff;">Encuentra dónde ver tus miniseries cortas favoritas al instante.</p>
+        
+        <input type="text" id="searchInput" placeholder="Ej: ReelShort, DramaBox, romance..." onkeyup="filtrarPlataformas()">
+        
+        <div class="results-container" id="resultsList">
+            <!-- Los elementos se cargan dinámicamente -->
+        </div>
+
+        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="procesarImagen(this)">
+        <button class="btn" onclick="document.getElementById('fileInput').click();">📷 Escanear Captura</button>
     </div>
 
     <script>
-        function buscarEnGoogle(input) {
+        // Catálogo interno de plataformas de miniseries cortas
+        const plataformas = [
+            { nombre: "ReelShort", desc: "Miniseries de romance, drama y millonarios.", url: "https://www.reelshort.com" },
+            { desc: "Dramas cortos y thrillers adictivos.", nombre: "DramaBox", url: "https://www.dramabox.com" },
+            { nombre: "ShortTV", desc: "Historias cortas de múltiples géneros.", url: "https://shorttv.app" },
+            { nombre: "FlexTV", desc: "Episodios rápidos en formato vertical.", url: "https://www.flextv.cc" },
+            { nombre: "NetShort", desc: "Plataforma global de minidramas.", url: "https://www.netshort.com" }
+        ];
+
+        function mostrarPlataformas(lista) {
+            const contenedor = document.getElementById('resultsList');
+            contenedor.innerHTML = "";
+            lista.forEach(p => {
+                contenedor.innerHTML += `
+                    <div class="platform-item">
+                        <div class="platform-info">
+                            <h4>${p.nombre}</h4>
+                            <p>${p.desc}</p>
+                        </div>
+                        <a href="${p.url}" target="_blank" class="visit-btn">Ver</a>
+                    </div>
+                `;
+            });
+        }
+
+        function filtrarPlataformas() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtradas = plataformas.filter(p => 
+                p.nombre.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)
+            );
+            mostrarPlataformas(filtradas);
+        }
+
+        function procesarImagen(input) {
             if (input.files && input.files[0]) {
-                window.open("https://www.google.com/search?q=miniserie+corta+ver+online", "_blank");
+                // Simulación de procesamiento interno rápido en la app
+                alert("¡Imagen cargada en Miru! Analizando contenido en el núcleo...");
+                // Aquí simulamos que encontró una coincidencia destacada
+                document.getElementById('searchInput').value = "ReelShort";
+                filtrarPlataformas();
             }
         }
+
+        // Cargar todas al iniciar
+        mostrarPlataformas(plataformas);
     </script>
 </body>
 </html>
+
