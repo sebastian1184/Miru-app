@@ -74,26 +74,45 @@
             justify-content: space-between;
             align-items: center;
         }
+        .item-info {
+            max-width: 55%;
+        }
         .item-info h4 {
             margin: 0;
             color: #ff00ff;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            word-break: break-word;
         }
         .item-info p {
             margin: 3px 0 0 0;
             color: #a70bfa;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .copy-btn {
+            background: #ff00ff;
+            color: #0b091a;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            cursor: pointer;
         }
         .visit-btn {
             background: #00ffff;
             color: #0b091a;
             border: none;
-            padding: 6px 12px;
+            padding: 6px 8px;
             border-radius: 5px;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
         }
     </style>
 </head>
@@ -105,7 +124,7 @@
         <h3>Biblioteca de Contenido</h3>
         <p style="font-size: 0.85rem; color: #00ffff;">Busca tu miniserie o plataforma favorita:</p>
         
-        <input type="text" id="searchInput" placeholder="Ej: Casada con un millonario, ReelShort..." onkeyup="filtrarContenido()">
+        <input type="text" id="searchInput" placeholder="Ej: The Double Life, ReelShort..." onkeyup="filtrarContenido()">
         
         <div class="results-container" id="resultsList"></div>
 
@@ -114,14 +133,13 @@
     </div>
 
     <script>
-        // Base de datos combinada de miniseries populares y plataformas
         const baseDatos = [
-            { tipo: "Serie", titulo: "The Double Life of My Billionaire Husband", plataforma: "ReelShort", desc: "Romance y drama de millonarios", url: "https://www.reelshort.com" },
-            { tipo: "Serie", titulo: "Never Divorce a Secret Billionaire Heiress", plataforma: "ReelShort", desc: "Venganza y romance oculto", url: "https://www.reelshort.com" },
-            { tipo: "Serie", titulo: "The Alpha's Surrogate", plataforma: "DramaBox", desc: "Drama de romance y lobos/fantasía", url: "https://www.dramabox.com" },
-            { tipo: "Plataforma", titulo: "ReelShort", plataforma: "App Oficial", desc: "Miniseries de romance y drama", url: "https://www.reelshort.com" },
-            { tipo: "Plataforma", titulo: "DramaBox", plataforma: "App Oficial", desc: "Dramas cortos y thrillers adictivos", url: "https://www.dramabox.com" },
-            { tipo: "Plataforma", titulo: "ShortTV", plataforma: "App Oficial", desc: "Historias cortas variadas", url: "https://shorttv.app" }
+            { tipo: "Serie", titulo: "The Double Life of My Billionaire Husband", plataforma: "ReelShort", desc: "Romance y drama", url: "https://www.reelshort.com" },
+            { tipo: "Serie", titulo: "Never Divorce a Secret Billionaire Heiress", plataforma: "ReelShort", desc: "Venganza y romance", url: "https://www.reelshort.com" },
+            { tipo: "Serie", titulo: "The Alpha's Surrogate", plataforma: "DramaBox", desc: "Drama de fantasía", url: "https://www.dramabox.com" },
+            { tipo: "Plataforma", titulo: "ReelShort", plataforma: "App Oficial", desc: "Miniseries de romance", url: "https://www.reelshort.com" },
+            { tipo: "Plataforma", titulo: "DramaBox", plataforma: "App Oficial", desc: "Dramas cortos", url: "https://www.dramabox.com" },
+            { tipo: "Plataforma", titulo: "ShortTV", plataforma: "App Oficial", desc: "Historias cortas", url: "https://shorttv.app" }
         ];
 
         function mostrarResultados(lista) {
@@ -131,21 +149,32 @@
                 contenedor.innerHTML = `<p style="color: #a70bfa; text-align: center; font-size: 0.85rem;">No se encontraron resultados</p>`;
                 return;
             }
-            lista.forEach(item => {
+            lista.forEach((item, index) => {
                 contenedor.innerHTML += `
                     <div class="item-card">
                         <div class="item-info">
                             <h4>${item.titulo}</h4>
-                            <p>[${item.plataforma}] ${item.desc}</p>
+                            <p>[${item.plataforma}]</p>
                         </div>
-                        <a href="${item.url}" target="_blank" class="visit-btn">Ver</a>
+                        <div class="action-buttons">
+                            <button class="copy-btn" onclick="copiarTexto('${item.titulo}')">Copiar</button>
+                            <a href="${item.url}" target="_blank" class="visit-btn">Ver</a>
+                        </div>
                     </div>
                 `;
             });
         }
 
+        function copiarTexto(texto) {
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("¡Copiado! Ya puedes pegarlo en la aplicación.");
+            }).catch(err => {
+                alert("Error al copiar el texto");
+            });
+        }
+
         function filtrarContenido() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
+            const query = document.getElementById('searchInput'].value.toLowerCase();
             const filtrados = baseDatos.filter(item => 
                 item.titulo.toLowerCase().includes(query) || 
                 item.plataforma.toLowerCase().includes(query) || 
@@ -156,16 +185,15 @@
 
         function procesarImagen(input) {
             if (input.files && input.files[0]) {
-                // Simulación de reconocimiento de imagen interno en la app
                 alert("¡Captura analizada en el núcleo! Coincidencia encontrada.");
                 document.getElementById('searchInput').value = "Billionaire";
                 filtrarContenido();
             }
         }
 
-        // Mostrar todo al iniciar
         mostrarResultados(baseDatos);
     </script>
 </body>
 </html>
+
 
