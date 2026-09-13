@@ -1,4 +1,3 @@
-
 name: Build Web App
 
 on:
@@ -17,3 +16,4 @@ jobs:
       with:
         name: web-app-files
         path: index.html
+
